@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyperchromes Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Hyperchromes Tracker</h1>
+        <button id="refreshButton">Atualizar Dados</button>
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>Nome do Jogador</th>
+                    <th>Quantidade de Hyperchromes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <script src="server.js"></script>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Código JavaScript Interno -->
+    <script>
+        document.getElementById('refreshButton').addEventListener('click', refreshData);
+
+        function refreshData() {
+            const url = 'https://seuservidor.com/api/atualizar_hyperchromes';  // Substitua com o URL correto
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    updateTable(data);
+                })
+                .catch(error => {
+                    console.error('Erro ao pegar os dados:', error);
+                });
+        }
+
+        function updateTable(data) {
+            const tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+            
+            // Limpa a tabela antes de atualizar
+            tableBody.innerHTML = '';
+
+            // Adiciona os dados recebidos à tabela
+            data.forEach(playerData => {
+                const row = document.createElement('tr');
+                const playerNameCell = document.createElement('td');
+                const hyperchromeCountCell = document.createElement('td');
+                
+                playerNameCell.textContent = playerData.playerId;
+                hyperchromeCountCell.textContent = playerData.hyperchromeCount;
+
+                row.appendChild(playerNameCell);
+                row.appendChild(hyperchromeCountCell);
+
+                tableBody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
